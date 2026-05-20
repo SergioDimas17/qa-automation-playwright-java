@@ -1,0 +1,1 @@
+"Hola Playwright, esta es una prueba de carga exitosa."
