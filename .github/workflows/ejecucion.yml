@@ -36,3 +36,20 @@ jobs:
       # Paso E: ¡La hora de la verdad! Ejecutar las 12 pruebas (UI y API Backend)
       - name: Ejecutar Suite de Pruebas Completa
         run: mvn test
+
+        name: Pipeline de Automatizacion QA - Playwright y Java
+
+        # Definimos variables de entorno globales para el pipeline
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+        on:
+          push:
+            branches: [ main ]
+          pull_request:
+            branches: [ main ]
+
+        jobs:
+          pruebas-automatizadas:
+            runs-on: ubuntu-latest
+            # ... (el resto de tus pasos se quedan exactamente igual)
