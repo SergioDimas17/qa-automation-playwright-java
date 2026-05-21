@@ -1,55 +1,34 @@
 name: Pipeline de Automatizacion QA - Playwright y Java
 
-# 1. Disparadores (Triggers): Cuándo se va a ejecutar este pipeline
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 on:
   push:
-    branches: [ main ] # Se activa automáticamente cada vez que subas código a la rama main
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
-# 2. Los Trabajos (Jobs): Qué va a hacer la computadora virtual
 jobs:
   pruebas-automatizadas:
-    runs-on: ubuntu-latest # Usaremos un sistema operativo Linux (Ubuntu) de última generación
+    runs-on: ubuntu-latest
 
     steps:
-      # Paso A: Descargar el código de tu repositorio de GitHub dentro de la máquina virtual
       - name: Copiar codigo del repositorio
         uses: actions/checkout@v4
 
-      # Paso B: Instalar el Entorno de Desarrollo de Java (JDK) de forma limpia
       - name: Configurar Java JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17' # Usamos la versión estable de Java
+          java-version: '17'
           distribution: 'temurin'
-          cache: maven # Guarda en caché las librerías para que las próximas ejecuciones sean más rápidas
+          cache: maven
 
-      # Paso C: Compilar el proyecto para que Playwright se registre en el sistema de la máquina virtual
       - name: Construir proyecto con Maven
         run: mvn -B package -DskipTests
 
-      # Paso D: Instalar los navegadores nativos de Playwright (Chromium, Firefox, WebKit) en la nube
       - name: Instalar Navegadores de Playwright
         run: mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
 
-      # Paso E: ¡La hora de la verdad! Ejecutar las 12 pruebas (UI y API Backend)
       - name: Ejecutar Suite de Pruebas Completa
         run: mvn test
-
-        name: Pipeline de Automatizacion QA - Playwright y Java
-
-        # Definimos variables de entorno globales para el pipeline
-        env:
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
-
-        on:
-          push:
-            branches: [ main ]
-          pull_request:
-            branches: [ main ]
-
-        jobs:
-          pruebas-automatizadas:
-            runs-on: ubuntu-latest
-            # ... (el resto de tus pasos se quedan exactamente igual)
