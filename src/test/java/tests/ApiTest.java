@@ -24,9 +24,9 @@ public class ApiTest {
     public static void inicializarConsola() {
         playwright = Playwright.create();
 
-        // Creamos un mapa de cabeceras para identificarnos de forma segura ante cualquier filtro de red
         java.util.Map<String, String> cabeceras = new java.util.HashMap<>();
         cabeceras.put("Accept", "application/json");
+        cabeceras.put("Content-Type", "application/json"); // 👈 Cabecera crucial para el método POST
         cabeceras.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
 
         peticion = playwright.request().newContext(new APIRequest.NewContextOptions()

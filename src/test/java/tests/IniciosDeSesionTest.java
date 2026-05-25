@@ -41,9 +41,11 @@ public class IniciosDeSesionTest { // [cite: 149]
             // Imprime un aviso informativo en la consola de IntelliJ [cite: 162]
             System.out.println("Intentando iniciar la prueba en Firefox...");
 
-            // Intenta lanzar Firefox de manera visible (setHeadless: false) y con pausa de 1 segundo entre acciones [cite: 162]
-            browser = playwright.firefox().launch(
-                    new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(1000)
+            // Si la variable "CI" existe, corre oculto (true); si no, corre visual (false)
+            boolean modoOculto = System.getenv("CI") != null;
+
+            Browser browser = playwright.firefox().launch(new BrowserType.LaunchOptions()
+                    .setHeadless(modoOculto)
             );
         }
         // PLAN DE RESPALDO (CATCH): Si tu computadora no tiene Firefox o este falla, se activa este bloque [cite: 73, 162]
