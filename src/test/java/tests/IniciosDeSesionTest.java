@@ -36,26 +36,22 @@ public class IniciosDeSesionTest { // [cite: 149]
         // Encendemos el servidor/motor central de Playwright en tu computadora [cite: 157]
         playwright = Playwright.create();
 
-        // RED DE SEGURIDAD (TRY-CATCH): Intentamos abrir el navegador principal sin que el programa muera [cite: 73, 157]
         try {
-            // Imprime un aviso informativo en la consola de IntelliJ [cite: 162]
             System.out.println("Intentando iniciar la prueba en Firefox...");
-
-            // Si la variable "CI" existe, corre oculto (true); si no, corre visual (false)
             boolean modoOculto = System.getenv("CI") != null;
 
-            Browser browser = playwright.firefox().launch(new BrowserType.LaunchOptions()
+            // ¡Le quitamos la palabra 'Browser' para usar la variable global!
+            browser = playwright.firefox().launch(new BrowserType.LaunchOptions()
                     .setHeadless(modoOculto)
             );
-        }
-        // PLAN DE RESPALDO (CATCH): Si tu computadora no tiene Firefox o este falla, se activa este bloque [cite: 73, 162]
-        catch (Exception e) {
-            // Informa en consola que se activó la contingencia [cite: 162]
+        } catch (Exception e) {
             System.out.println("¡Ups! Firefox falló. Iniciando Chromium de respaldo...");
 
-            // Lanza el navegador Chromium (base de Chrome) para no detener tu automatización [cite: 162]
+            boolean modoOculto = System.getenv("CI") != null;
+
+            // Aquí también usamos la variable global y el modo oculto dinámico
             browser = playwright.chromium().launch(
-                    new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(1000)
+                    new BrowserType.LaunchOptions().setHeadless(modoOculto).setSlowMo(1000)
             );
         }
 
